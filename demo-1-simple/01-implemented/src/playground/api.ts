@@ -9,8 +9,8 @@ const fetchWithDelay = (url: string, delay: number): Promise<any> =>
     setTimeout(() => resolve(Axios.get(url).then(({ data }) => data)), delay)
   );
 
-export const getMovies = (): Promise<Movie[]> =>
-  fetchWithDelay(moviesURL, 1000);
+export const getMovies = (delay = 1000): Promise<Movie[]> =>
+  fetchWithDelay(moviesURL, delay);
 
-export const getActors = (): Promise<Actor[]> =>
-  fetchWithDelay(actorsURL, 150);
+export const getActors = (delay = 1000): Promise<Actor[]> =>
+  fetchWithDelay(actorsURL, delay);

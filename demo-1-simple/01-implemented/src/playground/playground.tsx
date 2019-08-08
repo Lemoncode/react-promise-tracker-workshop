@@ -57,7 +57,7 @@ const useActors = () => {
 
   const handleLoadActors = async () => {
     setActors([]);
-    const newActors = await trackPromise(getActors());
+    const newActors = await trackPromise(getActors(150));
     setActors(newActors);
   };
 
@@ -70,7 +70,7 @@ const useActors = () => {
 };
 
 const Spinner: React.FunctionComponent = () => {
-  const { promiseInProgress } = usePromiseTracker({ delay: 300 });
+  const { promiseInProgress } = usePromiseTracker();
   return promiseInProgress && <CircularProgress size={60} />;
 };
 

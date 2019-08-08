@@ -93,31 +93,38 @@ const Spinner: React.FunctionComponent = () => {
 
 # Delay
 
-Sometimes, there is a flicker behaviour with spinner due to the fast speed connection.
+Sometimes, there is a flicker behaviour with spinner due to the fast speed connection. Let's simulate it:
 
-- Let's simulate it:
+- By default `getMovies` and `getActors` have a `1 second` timeout, so let's decrease `getActors` promise timeout:
 
-### ./src/playground/api.ts
+### ./src/playground/playground.ts
 
 ```diff
-import Axios from 'axios';
-import { Movie, Actor } from './model';
 
-const moviesURL = `${process.env.BASE_API_URL}/api/movies`;
-const actorsURL = `${process.env.BASE_API_URL}/api/actors`;
+const useActors = () => {
+  const [actors, setActors] = React.useState<Actor[]>([]);
 
-const fetchWithDelay = (url: string, delay: number): Promise<any> =>
-  new Promise(resolve =>
-    setTimeout(() => resolve(Axios.get(url).then(({ data }) => data)), delay)
-  );
+  const handleLoadActors = async () => {
+    setActors([]);
+-   const newActors = await trackPromise(getActors());
++   const newActors = await trackPromise(getActors(150));
+    setActors(newActors);
+  };
 
-export const getMovies = (): Promise<Movie[]> =>
-  fetchWithDelay(moviesURL, 1000);
+  const loadActors = React.useCallback(handleLoadActors, []);
 
-export const getActors = (): Promise<Actor[]> =>
-- fetchWithDelay(actorsURL, 1000);
-+ fetchWithDelay(actorsURL, 150);
+  return {
+    actors,
+    loadActors,
+  };
+};
 
+```
+
+- Let's check it:
+
+```bash
+npm start
 ```
 
 - This time, we are going to provide a spinner `delay` to avoid show it if promise was resolved before it.
