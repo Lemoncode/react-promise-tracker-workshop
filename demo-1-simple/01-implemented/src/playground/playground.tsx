@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +40,7 @@ const useMovies = () => {
 
   const handleLoadMovies = async () => {
     setMovies([]);
-    const newMovies = await getMovies();
+    const newMovies = await trackPromise(getMovies());
     setMovies(newMovies);
   };
 
@@ -56,7 +57,7 @@ const useActors = () => {
 
   const handleLoadActors = async () => {
     setActors([]);
-    const newActors = await getActors();
+    const newActors = await trackPromise(getActors());
     setActors(newActors);
   };
 
@@ -69,7 +70,8 @@ const useActors = () => {
 };
 
 const Spinner: React.FunctionComponent = () => {
-  return true && <CircularProgress size={60} />;
+  const { promiseInProgress } = usePromiseTracker({ delay: 300 });
+  return promiseInProgress && <CircularProgress size={60} />;
 };
 
 interface ImagesProps {

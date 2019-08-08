@@ -13,4 +13,4 @@ export const getMovies = (): Promise<Movie[]> =>
   fetchWithDelay(moviesURL, 1000);
 
 export const getActors = (): Promise<Actor[]> =>
-  fetchWithDelay(actorsURL, 1000);
+  fetchWithDelay(actorsURL, 150);
