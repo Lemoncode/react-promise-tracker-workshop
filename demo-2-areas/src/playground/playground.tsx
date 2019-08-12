@@ -22,7 +22,7 @@ export const Playground: React.FunctionComponent = props => {
         Load movies
       </Button>
       <Images images={movies} width="300" height="500" />
-      <Spinner />
+      <Spinner area="movies" color="primary" />
       <Button
         variant="outlined"
         className={classes.button}
@@ -30,6 +30,7 @@ export const Playground: React.FunctionComponent = props => {
       >
         Load actors
       </Button>
+      <Spinner area="actors" color="secondary" />
       <Images images={actors} />
     </div>
   );
@@ -40,7 +41,7 @@ const useMovies = () => {
 
   const handleLoadMovies = async () => {
     setMovies([]);
-    const newMovies = await trackPromise(getMovies());
+    const newMovies = await trackPromise(getMovies(), 'movies');
     setMovies(newMovies);
   };
 
@@ -57,7 +58,7 @@ const useActors = () => {
 
   const handleLoadActors = async () => {
     setActors([]);
-    const newActors = await trackPromise(getActors(150));
+    const newActors = await trackPromise(getActors(), 'actors');
     setActors(newActors);
   };
 
@@ -69,9 +70,15 @@ const useActors = () => {
   };
 };
 
-const Spinner: React.FunctionComponent = () => {
-  const { promiseInProgress } = usePromiseTracker({ delay: 300 });
-  return promiseInProgress && <CircularProgress size={60} />;
+interface SpinnerProps {
+  area: string;
+  color: 'primary' | 'secondary' | 'inherit';
+}
+
+const Spinner: React.FunctionComponent<SpinnerProps> = props => {
+  const { area, color } = props;
+  const { promiseInProgress } = usePromiseTracker({ area });
+  return promiseInProgress && <CircularProgress color={color} size={60} />;
 };
 
 interface ImagesProps {
