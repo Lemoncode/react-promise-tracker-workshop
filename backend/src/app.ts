@@ -5,7 +5,7 @@ import { PORT } from './config';
 import { mockMovies, mockActors } from './mock-data';
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors());
 const moviesPath = path.resolve(__dirname, './images/movies');
 const actorsPath = path.resolve(__dirname, './images/actors');
 app.use('/images', express.static(moviesPath));
